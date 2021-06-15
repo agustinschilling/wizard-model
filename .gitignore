@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # Rasa ignores
-# wizard-de-diseno/models/
+wizard-de-diseno/models/
 
 wizard-de-diseno/events.db
 wizard-de-diseno/events.db-shm
@@ -143,11 +143,11 @@ wizard-de-diseno/train_test_split/
 wizard-de-diseno/rasa.db
 
 wizard-de-diseno/settings.json
-# wizard-de-diseno/actions/images/
-# wizard-de-diseno/actions/models/
-# wizard-de-diseno/actions/models.zip
+wizard-de-diseno/actions/images/
+wizard-de-diseno/actions/models/
+wizard-de-diseno/actions/models.zip
 
-# modelado-de-objetos/models/
+modelado-de-objetos/models/
 
 modelado-de-objetos/events.db
 modelado-de-objetos/events.db-shm
@@ -161,6 +161,6 @@ modelado-de-objetos/train_test_split/
 modelado-de-objetos/rasa.db
 
 modelado-de-objetos/settings.json
-# modelado-de-objetos/actions/images/
-# modelado-de-objetos/actions/models/
-# modelado-de-objetos/actions/models.zip
+modelado-de-objetos/actions/images/
+modelado-de-objetos/actions/models/
+modelado-de-objetos/actions/models.zip
