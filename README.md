@@ -23,6 +23,9 @@ https://www.youtube.com/watch?v=GlR60CvTh8A&ab_channel=Rasa
 
 Las principales modificaciones se realizan en los archivos de nlu (carpeta data) con en los de dominio (domain.yml)
 
+Para entrenar con script:<br/>
+`./script.sh` para entrenar el modelado de objetos luego de hacer modificaciones y copia dicho entrenamiento en wizard <br/>
+
 Para desarrollar se usan los comandos:<br/>
 `rasa train -d domain` para entrenar el modelo luego de hacer modificaciones <br/>
 `rasa shell` para probar el chatbot en la consola<br/>
