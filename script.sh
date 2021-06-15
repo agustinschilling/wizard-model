@@ -23,5 +23,7 @@ rm $archivoNuevo
 cd ..
 cd ..
 cd ..
-rasa train
-rasa shell
+
+# En caso de querer entrenar y correr wizard, descomentar las siguientes lineas (recordar correr actions)
+# rasa train
+# rasa shell
