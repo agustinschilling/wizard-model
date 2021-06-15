@@ -127,3 +127,40 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Rasa ignores
+# wizard-de-diseno/models/
+
+wizard-de-diseno/events.db
+wizard-de-diseno/events.db-shm
+wizard-de-diseno/events.db-wal
+wizard-de-diseno/rasa.sb
+wizard-de-diseno/story_graph.dot
+
+wizard-de-diseno/.DS_Store
+wizard-de-diseno/results/
+wizard-de-diseno/train_test_split/
+wizard-de-diseno/rasa.db
+
+wizard-de-diseno/settings.json
+# wizard-de-diseno/actions/images/
+# wizard-de-diseno/actions/models/
+# wizard-de-diseno/actions/models.zip
+
+# modelado-de-objetos/models/
+
+modelado-de-objetos/events.db
+modelado-de-objetos/events.db-shm
+modelado-de-objetos/events.db-wal
+modelado-de-objetos/rasa.sb
+modelado-de-objetos/story_graph.dot
+
+modelado-de-objetos/.DS_Store
+modelado-de-objetos/results/
+modelado-de-objetos/train_test_split/
+modelado-de-objetos/rasa.db
+
+modelado-de-objetos/settings.json
+# modelado-de-objetos/actions/images/
+# modelado-de-objetos/actions/models/
+# modelado-de-objetos/actions/models.zip

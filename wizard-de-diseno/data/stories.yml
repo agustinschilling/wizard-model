@@ -1,0 +1,13 @@
+version: "2.0"
+stories:
+- story: interactive_story_1
+  steps:
+  - intent: pedido_ayuda_modelado
+  - action: utter_como_no
+  - action: utter_pedir_requerimiento
+  - intent: requerimiento
+  - action: action_modelado
+  - intent: negacion
+  - action: action_modelado_rechazo
+  - intent: basta
+  - action: utter_feedback

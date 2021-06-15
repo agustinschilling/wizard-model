@@ -1,0 +1,32 @@
+version: "2.0"
+
+intents:
+  - double_chain_and_star:
+      use_entities: True
+  - double_chain:
+      use_entities: True
+  - simple_chain_and_star:
+      use_entities: True
+  - simple_chain:
+      use_entities: True
+  - star_and_double_chain:
+      use_entities: True
+  - star:
+      use_entities: True
+  - specs:
+      use_entities: True
+  - misc:
+      use_entities: True
+
+entities:
+  - ACTION
+  - EVENT
+  - MODEL
+  - MODULE
+  - PROPERTY
+  - SYSTEM
+  - COMPONENT
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
