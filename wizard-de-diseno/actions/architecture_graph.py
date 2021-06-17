@@ -193,7 +193,7 @@ class GraphManager:
         Para los nodos 
         """
         events = [e for e in entities if e.is_event()]
-        for event in enumerate(events):
+        for event in events:
             node1,node2 = self.find_nodes_connected_by_event(event,nodes)          
             self.add_labeled_edge(node1,node2,event)
     
@@ -249,16 +249,15 @@ class GraphManager:
 
 
 COLORS = [
-    "aliceblue",
-    "aqua",
-    "antiquewhite4",
+    "aquamarine4",
     "blue",
     "brown",
     "brown2",
     "chartreuse",
     "chocolate",
     "darkgreen"	,
+    "darkblue",
     "darkolivegreen1",
     "deeppink",
-    "gold2	"
+    "gold3"
 ]

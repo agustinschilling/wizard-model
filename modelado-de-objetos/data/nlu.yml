@@ -11,7 +11,6 @@ nlu:
   examples: | 
     - Los [mails](COMPONENT) [contendrán](EVENT) las [frases similares](MODEL) [encontradas](EVENT) en los [últimos días](PROPERTY)
     - La [aplicación](SYSTEM) [envíara](EVENT) [mails](COMPONENT) [diarios](PROPERTY) a una lista de [suscriptos](MODEL)
-    - La [aplicación](SYSTEM) debe [comparar](EVENT) las [frases chequeables](MODEL) con el [historial](MODEL) de [frases verificadas](MODEL) y [determinar](EVENT) si son [frases similares](MODEL)
     - La [aplicación](SYSTEM) tiene que [extraer](EVENT) [frases chequeables](MODEL) de esas [notas](MODEL)
     - La [aplicación](SYSTEM) debe [extraer](EVENT) [diariamente](PROPERTY) las [notas](MODEL) de varios [medios digitales](COMPONENT)
     - El [sistema](SYSTEM) permitirá [registrar](EVENT) la [hora](PROPERTY) en la que un [empleado](MODEL) [ingresa](EVENT) o [sale](EVENT) del [trabajo](MODEL), [registrándolo](EVENT) en el [sistema](SYSTEM).
@@ -36,6 +35,7 @@ nlu:
     - Los [pedidos de compra](MODEL) que [excedan](EVENT) los [montos establecidos](PROPERTY) en el [flujo de liberaciones](MODEL) de pedidos configurados, deberán [pasar](EVENT) por las [aprobaciones establecidas](PROPERTY) en dicho [flujo de aprobación](MODEL).
 - intent: simple_chain_and_star
   examples: | 
+    - La [aplicación](SYSTEM) debe [detectar](EVENT) [frases similares](MODEL) a partir de [comparar](EVENT) [frases verificadas](MODEL) con [frases chequeables](MODEL)
     - Cada vez que se [ingrese](EVENT), [modifique](EVENT) o [elimine](EVENT) un [registro](MODEL) se [avisará](EVENT) al [administrador](MODEL) si el procedimiento fue [exitoso](PROPERTY) o [denegado](PROPERTY)
     - El [sistema](SYSTEM) [permitirá](EVENT) crear tres [tipos](PROPERTY) de [usuarios](MODEL), [administrador](MODEL), [usuario](MODEL) y [gerente](MODEL)   
     - El [software](SYSTEM) debe poder [emitir](EVENT) los siguientes [estados financieros](MODEL): [Balance general](PROPERTY), [Estado de ganancias y pérdidas](PROPERTY), [Estado de flujos de efectivo](PROPERTY). 

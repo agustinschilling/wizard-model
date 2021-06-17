@@ -27,7 +27,7 @@ def load_arqui(user_id):
         return arquis['arquis'][0]
 
 def load_color(user_id):
-    arqui = arquitecturas.find_one({'user_id':user_id},{'color_idx':1,'arqui':0,'user_id':0,'_id':0})
+    arqui = arquitecturas.find_one({'user_id':user_id},{'color_idx':1,'_id':0})
     if arqui:
         return arqui['color_idx']
 
