@@ -3,7 +3,7 @@ import enchant
 import os 
 from rasa_sdk.events import SlotSet
 from datetime import datetime
-from .mongo_client import load_arqui, save_arqui, remove_arqui
+from actions import mongo_client 
 
 class GraphManager:
     """
@@ -24,11 +24,13 @@ class GraphManager:
         """
         self.id = id
 
-        graph = load_arqui(id)
+        graph = mongo_client.load_arqui(id)
         if graph:
             self.graph = pgv.AGraph(string=graph)
+            self.color_idx = mongo_client.load_color(id)
         else:
             self.graph = self.create_new()
+            self.color_idx = 0
 
     def create_new(self):
         """
@@ -40,10 +42,10 @@ class GraphManager:
         """
         Almacenar nueva version de la arqui en mongodb
         """
-        return save_arqui(self.id, self.graph.to_string())
+        return mongo_client.save_arqui(self.id, self.graph.to_string(), self.color_idx+1)
 
     def remove_last(self):
-        remove_arqui(self.id)
+        mongo_client.remove_arqui(self.id)
         self.__init__(self.id)
 
     def update_graph_with_new_entities(self,entities,intent):
@@ -155,18 +157,13 @@ class GraphManager:
         Agregar una arista entre dos nodos. 
         Si la arista ya existe, simplemente actualizar la etiqueta
         """
-        if self.graph.has_edge(node1.name,node2.name):
-            edge = self.graph.get_edge(node1.name, node2.name) 
-            self.update_edge_label(edge,entity)
-        else:
-            self.graph.add_edge(node1.name, node2.name, label=entity.name)  
+        self.graph.add_edge(node1.name, node2.name, label=entity.name, color=COLORS[self.color_idx])  
 
     def add_edge(self,node1,node2):
         """
         Agregar arista sin etiqueta entre dos nodos
         """
-        if not self.graph.has_edge(node1.name,node2.name):
-            self.graph.add_edge(node1.name, node2.name)  
+        self.graph.add_edge(node1.name, node2.name, color=COLORS[self.color_idx])  
 
     def find_nodes_connected_by_event(self,event,nodes):   
         """
@@ -196,7 +193,7 @@ class GraphManager:
         Para los nodos 
         """
         events = [e for e in entities if e.is_event()]
-        for event in events:
+        for event in enumerate(events):
             node1,node2 = self.find_nodes_connected_by_event(event,nodes)          
             self.add_labeled_edge(node1,node2,event)
     
@@ -250,3 +247,18 @@ class GraphManager:
             if not self.graph.has_edge(main_node.name,node.name):
                 self.add_edge(main_node,node)
 
+
+COLORS = [
+    "aliceblue",
+    "aqua",
+    "antiquewhite4",
+    "blue",
+    "brown",
+    "brown2",
+    "chartreuse",
+    "chocolate",
+    "darkgreen"	,
+    "darkolivegreen1",
+    "deeppink",
+    "gold2	"
+]

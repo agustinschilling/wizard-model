@@ -7,13 +7,14 @@ db = client.ArquitecturaDataBase
 arquitecturas = db.arquitecturas
 
 #insertar un solo doc
-def save_arqui(user_id,arqui):
+def save_arqui(user_id,arqui,color_idx=0):
     # TODO: guardar lista de arquis, poner vacia en el setOnInsert, y desp en el set agregarla a la lista
     result = arquitecturas.update_one(
         {'user_id':user_id},
         {
             '$setOnInsert': {'user_id':user_id},
-            '$push': {'arquis': arqui}
+            '$push': {'arquis': arqui},
+            '$set':{'color_idx': color_idx}
         },
          upsert=True)
     return result.modified_count
@@ -21,10 +22,15 @@ def save_arqui(user_id,arqui):
 # TODO: traer la lista y sacar la utima. Chequear si la lista esta vacia!! Devolver none
 def load_arqui(user_id):
     #arquis = arquitecturas.find({'user_id':user_id},{'arquis':{'$exists':True,'$not':{'$size':0}}})
-    arquis = arquitecturas.find_one({'user_id':user_id},{'arquis':{'$slice': -1},'user_id':0,'_id':0})
+    arquis = arquitecturas.find_one({'user_id':user_id},{'arquis':{'$slice': -1},'color_idx':0,'user_id':0,'_id':0})
     if arquis: 
         return arquis['arquis'][0]
-   
+
+def load_color(user_id):
+    arqui = arquitecturas.find_one({'user_id':user_id},{'color_idx':1,'arqui':0,'user_id':0,'_id':0})
+    if arqui:
+        return arqui['color_idx']
+
 # TODO: consultar si el user_id tiene una lista de arquis y no esta vacia, sacar la ultima
 def remove_arqui(user_id):
     arquis = arquitecturas.find({'user_id':user_id},{'arquis':{'$exists':True,'$not':{'$size':0}}})
