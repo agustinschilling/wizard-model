@@ -11,9 +11,9 @@ nlu:
   examples: | 
     - Los [mails](COMPONENT) [contendrán](EVENT) las [frases similares](MODEL) [encontradas](EVENT) en los [últimos días](PROPERTY)
     - La [aplicación](SYSTEM) [envíara](EVENT) [mails](COMPONENT) [diarios](PROPERTY) a una lista de [suscriptos](MODEL)
-    - La [aplicación](SYSTEM) debe [comparar](EVENT) las [frases chequeables](MODEL) con el [historial](MODEL) de [frases verificadas](MODEL) y [determinar](EVENT) si son [similares](PROPERTY)
+    - La [aplicación](SYSTEM) debe [comparar](EVENT) las [frases chequeables](MODEL) con el [historial](MODEL) de [frases verificadas](MODEL) y [determinar](EVENT) si son [frases similares](MODEL)
     - La [aplicación](SYSTEM) tiene que [extraer](EVENT) [frases chequeables](MODEL) de esas [notas](MODEL)
-    - La [aplicación](SYSTEM) debe [extraer](EVENT) [diariamente](PROPERTY) las [notas](MODEL) de varios [medios digitales](MODEL)
+    - La [aplicación](SYSTEM) debe [extraer](EVENT) [diariamente](PROPERTY) las [notas](MODEL) de varios [medios digitales](COMPONENT)
     - El [sistema](SYSTEM) permitirá [registrar](EVENT) la [hora](PROPERTY) en la que un [empleado](MODEL) [ingresa](EVENT) o [sale](EVENT) del [trabajo](MODEL), [registrándolo](EVENT) en el [sistema](SYSTEM).
     - El [sistema](SYSTEM) [deberá](EVENT) dar [respuesta](PROPERTY) al [acceso](EVENT) de [todos](PROPERTY) los [usuarios](MODEL) 
     - El [administrador](MODEL) podrá [ingresar](EVENT) registros de nuevos [productos](MODEL) en la [web](COMPONENT).
