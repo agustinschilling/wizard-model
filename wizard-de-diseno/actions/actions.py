@@ -11,7 +11,6 @@ from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import FollowupAction
 from rasa_sdk.forms import FormValidationAction
 
-from .analisis_de_patrones import get_recomendacion
 from .modelado import update_graph, remove_graph
 
 # Setup wikipedia
