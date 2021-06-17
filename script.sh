@@ -6,7 +6,7 @@ rasa train
 
 cd ..
 
-rmdir wizard-de-diseno/actions/models/modelado
+rm -r wizard-de-diseno/actions/models/modelado
 mkdir wizard-de-diseno/actions/models/modelado
 
 archivoNuevo=$(ls -t modelado-de-objetos/models | cut -d'
