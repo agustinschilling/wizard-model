@@ -18,10 +18,13 @@ nlu:
 - intent: negacion
   examples: |
     - Nop
-    - No
+    - No me gusto
     - No hay más
     - Ninguno
     - Nada
+    - Así no
+    - Te equivocas
+    - No, te quedo mal
 
 - intent: requerimiento
   examples: |

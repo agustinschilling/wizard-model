@@ -11,7 +11,7 @@ from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import FollowupAction
 from rasa_sdk.forms import FormValidationAction
 
-from .modelado import update_graph, remove_graph
+from . import modelado
 
 # Setup wikipedia
 import wikipedia
@@ -54,9 +54,9 @@ class ActionModelado(Action):
         ) -> List[Dict[Text, Any]]:
 
         text =  tracker.latest_message['text']
-        utter, image = update_graph(tracker.sender_id, text)
+        utter, image = modelado.update_graph(tracker.sender_id, text)
         dispatcher.utter_message(text=utter)
-        dispatcher.utter_message(image=image)
+        dispatcher.utter_message(image=image)        
         return[]
 
 class ActionModeladoRechazo(Action):
@@ -71,8 +71,42 @@ class ActionModeladoRechazo(Action):
             domain: Dict[Text, Any],
         ) -> List[Dict[Text, Any]]:
 
-        utter, image = remove_graph(tracker.sender_id)
+        utter, image = modelado.remove_graph(tracker.sender_id)
         dispatcher.utter_message(text=utter)
         dispatcher.utter_message(image=image)
         return[]
 
+
+class ActionPreguntaContestada(Action):
+
+    def name(self) -> Text:
+        return "action_pregunta_contestada"
+
+    def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+        ) -> List[Dict[Text, Any]]:
+
+        text = tracker.latest_message['text']
+        modelado.save_conocimiento(text)
+        dispatcher.utter_message(text="Claro comprendo... ")        
+        dispatcher.utter_message(text=modelado.get_pregunta(text))    
+        return[]
+
+class ActionPregunta(Action):
+
+    def name(self) -> Text:
+        return "action_pregunta"
+
+    def run(
+            self,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any],
+        ) -> List[Dict[Text, Any]]:
+
+        text =  tracker.latest_message['text']
+        dispatcher.utter_message(text=modelado.get_pregunta(text))
+        return[]

@@ -27,3 +27,15 @@ actions:
 - action_default_fallback
 - action_modelado
 - action_modelado_rechazo
+- action_pregunta
+- action_pregunta_contestada
+ 
+forms:
+  conocimiento_form:
+    required_slots:
+      conocimiento:
+        - type: from_text
+
+slots:
+  conocimiento:
+    type: text

@@ -6,7 +6,19 @@ rules:
   - intent: nlu_fallback
   - action: action_default_fallback
 
-- rule: analizar requerimientos
+- rule: conocimiento form
   steps:
   - intent: requerimiento
-  - action: action_modelado
+  - action: action_pregunta
+  - action: conocimiento_form
+  - active_loop: conocimiento_form
+
+- rule: conocimiento_form end
+  condition:
+  - active_loop: conocimiento_form
+  steps:
+  - action: conocimiento_form
+  - active_loop: null
+  - slot_was_set: 
+    - requested_slot: null
+  - action: action_pregunta_contestada

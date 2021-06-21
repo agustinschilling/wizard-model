@@ -2,11 +2,16 @@ from rasa.nlu.model import Interpreter
 from .entities import Entity
 from .architecture_graph import GraphManager
 import os
+import random
+
+
 # path of your model
 rasa_model_path = "actions/models/modelado/nlu"
 
 # create an interpreter object
 interpreter = Interpreter.load(rasa_model_path)
+
+from actions import mongo_client
 
 def rasa_output(text):
     """
@@ -19,9 +24,7 @@ def rasa_output(text):
 
 def update_graph(id,text):
     # Get analisis
-    rasa_parsing = rasa_output(text)
-    intent = rasa_parsing['intent']['name']
-    entities = parse_entities(rasa_parsing['entities'])
+    intent,entities = parse_req(text)
     print_summary(entities)
 
     # Update graph
@@ -43,6 +46,39 @@ def remove_graph(id):
     graph_image_file = graph_manager.get_image_file()
     return "Ahí lo corregí. Cómo avanzamos ahora?",os.path.abspath(graph_image_file)
     
+def parse_req(text):
+    rasa_parsing = rasa_output(text)
+    intent = rasa_parsing['intent']['name']
+    entities = parse_entities(rasa_parsing['entities'])
+
+    return intent, entities
+
+def get_pregunta(text):
+    # Get analisis
+    intent,entities = parse_req(text)
+    print_summary(entities)
+    relevant_entities = [e for e in entities if e.category == "MODEL" or e.category == "COMPONENT"]
+
+    for entity in relevant_entities:
+        if not mongo_client.get_conocimiento(entity.name):
+            options = [ "Contame que entendés por " + entity.name, 
+            "A qué te referís con " + entity.name +"?",
+            "Que significa " + entity.name + " en este contexto?"]
+            return random.choice(options)
+        
+    if len(relevant_entities) >= 2:
+        return "Explicame un poco la relacion entre " + relevant_entities[0].name + " y " + relevant_entities[1].name + " y cómo interactuan entre sí"
+    
+def save_conocimiento(text):
+    intent,entities = parse_req(text)
+    print_summary(entities)
+    relevant_entities = [e for e in entities if e.category == "MODEL" or e.category == "COMPONENT"]
+
+    for entity in relevant_entities:
+        if not mongo_client.get_conocimiento(entity.name):
+            mongo_client.save_conocimiento(entity.name, text,entity.category)
+            return 
+        
 
 #
 # Helper functions  
