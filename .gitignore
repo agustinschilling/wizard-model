@@ -165,3 +165,8 @@ modelado-de-objetos/actions/images/
 modelado-de-objetos/actions/models/
 modelado-de-objetos/actions/models.zip
 env
+/.idea/.gitignore
+/.idea/modules.xml
+/.idea/vcs.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/wizard-model.iml
