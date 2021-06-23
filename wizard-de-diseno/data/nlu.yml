@@ -32,3 +32,4 @@ nlu:
     - Los usuarios deben tener una ventana donde ver su estado de cuenta
     - El registro maestro de clientes tendrá asociado un límite de crédito. 
     - El sistema permitirá aprobar, cambiar o actualizar planes y cronogramas de proyecto.
+# TODO: AGREGAR MAS EJEMPLOS DE REQUERIMIENTOS MAS GENERICOS (TENGO UNA APLICACION QUE..., EL SISTEMA DEBE....)

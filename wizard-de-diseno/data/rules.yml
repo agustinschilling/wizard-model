@@ -6,19 +6,39 @@ rules:
   - intent: nlu_fallback
   - action: action_default_fallback
 
-- rule: conocimiento form
+- rule: entradas form
   steps:
-  - intent: requerimiento
-  - action: action_pregunta
-  - action: conocimiento_form
-  - active_loop: conocimiento_form
+  - action: action_analizar_entradas
+  - slot_was_set:
+    - termino_entradas: False
+  - action: preguntas_entrada_form
+  - active_loop: preguntas_entrada_form
 
-- rule: conocimiento_form end
+- rule: desactivar entradas form y terminar
   condition:
-  - active_loop: conocimiento_form
+  - active_loop: preguntas_entrada_form
   steps:
-  - action: conocimiento_form
+  - action: preguntas_entrada_form
+  - slot_was_set:
+    - termino_entradas: True
   - active_loop: null
-  - slot_was_set: 
+  - slot_was_set:
     - requested_slot: null
-  - action: action_pregunta_contestada
+  - action: action_guardar_entrada
+
+- rule: desactivar entradas form y seguir preguntando
+  condition:
+  - active_loop: preguntas_entrada_form
+  steps:
+  - action: preguntas_entrada_form
+  - slot_was_set:
+    - termino_entradas: False
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_guardar_entrada
+  - action: preguntas_entrada_form
+  - active_loop: preguntas_entrada_form
+
+# TODO: ARMAR MISMA ESTRUCTURA PERO PARA SALIDASSSS
+    

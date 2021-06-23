@@ -2,17 +2,18 @@ version: "2.0"
 stories:
 - story: interactive_story_1
   steps:
-  - intent: pedido_ayuda_modelado
-  - action: utter_como_no
-  - action: utter_pedir_requerimiento
   - intent: requerimiento
-  - action: action_pregunta
-  - action: conocimiento_form
-  - slot_was_set:
-    - conocimiento: es una... 
-  - active_loop: null
-  - slot_was_set: 
-    - requested_slot: null
-  - action: action_pregunta_contestada
-  - intent: basta
-  - action: utter_feedback
+  - action: utter_pregunta_entradas
+  - intent: requerimiento
+  - action: action_analizar_entradas
+
+# TODO: TESTEAR
+# - story: interactive_story_2
+#   steps:
+#   - action: preguntas_entrada_form
+#   - active_loop: null
+#   - action: utter_pregunta_salidas
+#   - intent: requerimiento
+#   - action: utter_pregunta_entradas
+#   - intent: requerimiento
+#   - action: action_analizar_salidas
