@@ -6,6 +6,13 @@ stories:
   - action: utter_pregunta_entradas
   - intent: requerimiento
   - action: action_analizar_entradas
+  - intent: basta
+  - action: utter_pregunta_salidas    # Algo aca en el medio para pasar a requis de salida
+  - intent: requerimiento_salida
+  - action: action_analizar_salidas
+
+
+
 
 # TODO: TESTEAR
 # - story: interactive_story_2

@@ -167,7 +167,7 @@ class ActionAnalizarEntradas(Action):
         text =  tracker.latest_message['text']
         # TODO: ANALISIS
         # Generar preguntas automagicamente para la entrada
-        return [SlotSet('termino_entradas',False),SlotSet('preguntas_entrada',["De que color es el caballo blanco de San Martín?"])]
+        return [SlotSet('termino_entradas',False),SlotSet('preguntas_entrada',["De que color es el caballo blanco de San Martín a la ENTRADA del baile?"])]
 
 class ActionAnalizarSalidas(Action):
 
@@ -184,7 +184,7 @@ class ActionAnalizarSalidas(Action):
         text =  tracker.latest_message['text']
         # TODO: ANALISIS
         # Generar preguntas automagicamente para la salida
-        return [SlotSet('preguntas_salida',["De que color es el caballo blanco de San Martín?"])]
+        return [SlotSet('termino_salidas',False),SlotSet('preguntas_salida',["De que color es el caballo blanco de San Martín a la SALIDA del baile?"])]
 
 
 class ActionGuardarEntrada(Action):

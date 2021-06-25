@@ -42,3 +42,36 @@ rules:
 
 # TODO: ARMAR MISMA ESTRUCTURA PERO PARA SALIDASSSS
     
+- rule: salidas form
+  steps:
+  - action: action_analizar_salidas
+  - slot_was_set:
+    - termino_salidas: False
+  - action: preguntas_salida_form
+  - active_loop: preguntas_salida_form
+
+- rule: desactivar salidas form y terminar
+  condition:
+  - active_loop: preguntas_salida_form
+  steps:
+  - action: preguntas_salida_form
+  - slot_was_set:
+    - termino_salidas: True
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_guardar_salida
+
+- rule: desactivar salidas form y seguir preguntando
+  condition:
+  - active_loop: preguntas_salida_form
+  steps:
+  - action: preguntas_salida_form
+  - slot_was_set:
+    - termino_salidas: False
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_guardar_salida
+  - action: preguntas_salida_form
+  - active_loop: preguntas_salida_form
