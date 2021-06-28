@@ -3,7 +3,7 @@
 #
 # See this guide on how to implement these action:
 # https://rasa.com/docs/rasa/custom-actions
-
+import random
 from typing import Any, Text, Dict, List, Optional
 
 from rasa_sdk import Action, Tracker
@@ -12,12 +12,16 @@ from rasa_sdk.events import FollowupAction, EventType
 from rasa_sdk.forms import FormValidationAction
 from rasa_sdk.events import SlotSet
 
+import requests
+from string import Template
 
 from . import modelado
 
 # Setup wikipedia
 import wikipedia
+
 wikipedia.set_lang("es")
+
 
 class ActionDefaultFallback(Action):
     """Ejecuta una accion de fallback que busca en wikipedia lo que no entiende el bot"""
@@ -30,8 +34,8 @@ class ActionDefaultFallback(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any],
-        ) -> List[Dict[Text, Any]]:
-    
+    ) -> List[Dict[Text, Any]]:
+
         text = tracker.latest_message['text']
 
         try:
@@ -40,8 +44,9 @@ class ActionDefaultFallback(Action):
             # TODO: add otras opciones!! (UTTER??)
             summary = "La verdad que no sé... porqué no hablamos de otra cosa?"
         dispatcher.utter_message(summary)
-        
+
         return [FollowupAction("action_listen")]
+
 
 class ActionModelado(Action):
 
@@ -53,13 +58,13 @@ class ActionModelado(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any],
-        ) -> List[Dict[Text, Any]]:
-
-        text =  tracker.latest_message['text']
+    ) -> List[Dict[Text, Any]]:
+        text = tracker.latest_message['text']
         utter, image = modelado.update_graph(tracker.sender_id, text)
         dispatcher.utter_message(text=utter)
-        dispatcher.utter_message(image=image)        
-        return[]
+        dispatcher.utter_message(image=image)
+        return []
+
 
 class ActionModeladoRechazo(Action):
 
@@ -71,12 +76,11 @@ class ActionModeladoRechazo(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any],
-        ) -> List[Dict[Text, Any]]:
-
+    ) -> List[Dict[Text, Any]]:
         utter, image = modelado.remove_graph(tracker.sender_id)
         dispatcher.utter_message(text=utter)
         dispatcher.utter_message(image=image)
-        return[]
+        return []
 
 
 class ActionPreguntaContestada(Action):
@@ -89,13 +93,13 @@ class ActionPreguntaContestada(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any],
-        ) -> List[Dict[Text, Any]]:
-
+    ) -> List[Dict[Text, Any]]:
         text = tracker.latest_message['text']
         modelado.save_conocimiento(text)
-        dispatcher.utter_message(text="Claro comprendo... ")        
-        dispatcher.utter_message(text=modelado.get_pregunta(text))    
-        return[]
+        dispatcher.utter_message(text="Claro comprendo... ")
+        dispatcher.utter_message(text=modelado.get_pregunta(text))
+        return []
+
 
 class ActionPregunta(Action):
 
@@ -107,18 +111,18 @@ class ActionPregunta(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any],
-        ) -> List[Dict[Text, Any]]:
-
-        text =  tracker.latest_message['text']
+    ) -> List[Dict[Text, Any]]:
+        text = tracker.latest_message['text']
         dispatcher.utter_message(text=modelado.get_pregunta(text))
-        return[]
+        return []
+
 
 class AskForRespuestaEntradaAction(Action):
     def name(self) -> Text:
         return "action_ask_respuesta_entrada"
 
     def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """
         Se fija la pregunta que tiene que hacer de acuerdo a la Queue de preguntas que tenemos
@@ -128,16 +132,17 @@ class AskForRespuestaEntradaAction(Action):
         if preguntas_entrada and len(preguntas_entrada) > 0:
             dispatcher.utter_message(text=preguntas_entrada.pop(0))
             if len(preguntas_entrada) == 0:
-                return [SlotSet('termino_entradas',True)]
+                return [SlotSet('termino_entradas', True)]
 
         return []
+
 
 class AskForRespuestaSalidaAction(Action):
     def name(self) -> Text:
         return "action_ask_respuesta_salida"
 
     def run(
-        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+            self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> List[EventType]:
         """
         Se fija la pregunta que tiene que hacer de acuerdo a la Queue de preguntas que tenemos
@@ -147,8 +152,8 @@ class AskForRespuestaSalidaAction(Action):
         if preguntas_salida and len(preguntas_salida) > 0:
             dispatcher.utter_message(text=preguntas_salida.pop(0))
             if len(preguntas_salida) == 0:
-                return [SlotSet('termino_salidas',True)]
-                
+                return [SlotSet('termino_salidas', True)]
+
         return []
 
 
@@ -162,12 +167,33 @@ class ActionAnalizarEntradas(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any],
-        ) -> List[Dict[Text, Any]]:
+    ) -> List[Dict[Text, Any]]:
 
-        text =  tracker.latest_message['text']
-        # TODO: ANALISIS
+        text = tracker.latest_message['text']
+        entity_extractor_response = requests.get('http://127.0.0.1:5000/', json={"text": text})
+        annotated_text = entity_extractor_response.json()
+        pos = annotated_text.get('pos')
+        lemma = annotated_text.get('lemma')
+        nouns = []
+        for i in range(0, len(lemma) - 1):
+            if pos[i] == 'NOUN':
+                nouns.append(lemma[i])
+
         # Generar preguntas automagicamente para la entrada
-        return [SlotSet('termino_entradas',False),SlotSet('preguntas_entrada',["De que color es el caballo blanco de San Martín a la ENTRADA del baile?"])]
+        return [SlotSet('termino_entradas', False), SlotSet('preguntas_entrada', self.generate_question_for_nouns(
+                                                                                nouns))]
+
+    def generate_question_for_nouns(self, nouns: List[str]) -> List[str]:
+        generic_questions = [Template('Contame de donde tenes que obtener $noun y si hay que hacerlo de manera regular'),
+                             Template('De donde sacamos $noun ?'),
+                             Template('Explicame un poco como pensas trabajar con $noun')]
+        noun_questions = []
+        for annotated_noun in nouns:
+            noun_questions.append(str(generic_questions[random.randrange(0, len(generic_questions) - 1)]
+                                  .substitute(noun=annotated_noun)))
+
+        return noun_questions
+
 
 class ActionAnalizarSalidas(Action):
 
@@ -179,12 +205,11 @@ class ActionAnalizarSalidas(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any],
-        ) -> List[Dict[Text, Any]]:
-
-        text =  tracker.latest_message['text']
-        # TODO: ANALISIS
-        # Generar preguntas automagicamente para la salida
-        return [SlotSet('termino_salidas',False),SlotSet('preguntas_salida',["De que color es el caballo blanco de San Martín a la SALIDA del baile?"])]
+    ) -> List[Dict[Text, Any]]:
+        text = tracker.latest_message['text']
+        # TODO Generar preguntas automagicamente para la salida
+        return [SlotSet('termino_salidas', False),
+                SlotSet('preguntas_salida', ["De que color es el caballo blanco de San Martín a la SALIDA del baile?"])]
 
 
 class ActionGuardarEntrada(Action):
@@ -197,18 +222,19 @@ class ActionGuardarEntrada(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any],
-        ) -> List[Dict[Text, Any]]:
+    ) -> List[Dict[Text, Any]]:
 
-        text =  tracker.latest_message['text']
+        text = tracker.latest_message['text']
         features = tracker.get_slot('features')
         if not features:
             features = [text]
         else:
             features.append(text)
-        
+
         # TODO: unificar en unica accion action_guardar y usarlapara ambos casos
         # Generar preguntas automagicamente
-        return [SlotSet('features',features)]
+        return [SlotSet('features', features)]
+
 
 class ActionGuardarSalida(Action):
 
@@ -220,14 +246,14 @@ class ActionGuardarSalida(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any],
-        ) -> List[Dict[Text, Any]]:
+    ) -> List[Dict[Text, Any]]:
 
-        text =  tracker.latest_message['text']
+        text = tracker.latest_message['text']
         features = tracker.get_slot('features')
         if not features:
             features = [text]
         else:
             features.append(text)
-        
+
         # Generar preguntas automagicamente
-        return [SlotSet('features',features)]
+        return [SlotSet('features', features)]
