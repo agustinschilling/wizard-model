@@ -6,6 +6,7 @@
 import random
 from typing import Any, Text, Dict, List, Optional
 
+import enchant
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import FollowupAction, EventType
@@ -157,6 +158,39 @@ class AskForRespuestaSalidaAction(Action):
         return []
 
 
+def generate_question_for_nouns(nouns: List[str]) -> List[str]:
+    generic_questions = [Template('Contame de donde tenes que obtener $noun y si hay que hacerlo de manera regular'),
+                         Template('De donde sacamos $noun ?'),
+                         Template('Explicame un poco como pensas trabajar con $noun')]
+    noun_questions = []
+    for annotated_noun in nouns:
+        noun_questions.append(str(generic_questions[random.randrange(0, len(generic_questions) - 1)]
+                                  .substitute(noun=annotated_noun)))
+
+    return noun_questions
+
+
+def check_word_similarity(word: str,
+                          words_list: List[str],
+                          case_sensitive: Optional[bool] = False,
+                          levenshtein_distance: Optional[int] = 0) -> bool:
+    """
+    Check if a word is similar to any word of list using levenshtein distance
+    @param word: word to check
+    @param words_list: list of words to compare
+    @param case_sensitive: use case sensitive
+    @param levenshtein_distance: custom levenshtein distance
+    @return: true if the distance is less than @levenshtein_distance, false otherwise
+    """
+    if not case_sensitive:
+        word = word.lower()
+        words_list = [x.lower() for x in words_list]
+    for x in words_list:
+        if enchant.utils.levenshtein(word, x) < levenshtein_distance:
+            return True
+    return False
+
+
 class ActionAnalizarEntradas(Action):
 
     def name(self) -> Text:
@@ -172,27 +206,18 @@ class ActionAnalizarEntradas(Action):
         text = tracker.latest_message['text']
         entity_extractor_response = requests.get('http://127.0.0.1:5000/', json={"text": text})
         annotated_text = entity_extractor_response.json()
+        # NOUN, VERB, ADJ, etc
         pos = annotated_text.get('pos')
+        # Simplified words
         lemma = annotated_text.get('lemma')
         nouns = []
         for i in range(0, len(lemma) - 1):
             if pos[i] == 'NOUN':
                 nouns.append(lemma[i])
-
+        nouns = [x for x in nouns if check_word_similarity(x, ['Aplicacion', 'Sistema'], levenshtein_distance=3)]
         # Generar preguntas automagicamente para la entrada
-        return [SlotSet('termino_entradas', False), SlotSet('preguntas_entrada', self.generate_question_for_nouns(
-                                                                                nouns))]
-
-    def generate_question_for_nouns(self, nouns: List[str]) -> List[str]:
-        generic_questions = [Template('Contame de donde tenes que obtener $noun y si hay que hacerlo de manera regular'),
-                             Template('De donde sacamos $noun ?'),
-                             Template('Explicame un poco como pensas trabajar con $noun')]
-        noun_questions = []
-        for annotated_noun in nouns:
-            noun_questions.append(str(generic_questions[random.randrange(0, len(generic_questions) - 1)]
-                                  .substitute(noun=annotated_noun)))
-
-        return noun_questions
+        return [SlotSet('termino_entradas', False), SlotSet('preguntas_entrada', generate_question_for_nouns(
+            nouns))]
 
 
 class ActionAnalizarSalidas(Action):
