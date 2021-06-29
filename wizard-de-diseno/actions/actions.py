@@ -3,6 +3,7 @@
 #
 # See this guide on how to implement these action:
 # https://rasa.com/docs/rasa/custom-actions
+import pdb
 import random
 from typing import Any, Text, Dict, List, Optional
 
@@ -158,14 +159,13 @@ class AskForRespuestaSalidaAction(Action):
         return []
 
 
-def generate_question_for_nouns(nouns: List[str]) -> List[str]:
-    generic_questions = [Template('Contame de donde tenes que obtener $noun y si hay que hacerlo de manera regular'),
-                         Template('De donde sacamos $noun ?'),
-                         Template('Explicame un poco como pensas trabajar con $noun')]
+def fill_simple_templates(filler: List[str],
+                          generic_questions: List[Template],
+                          argument_name: str) -> List[str]:
     noun_questions = []
-    for annotated_noun in nouns:
+    for string in filler:
         noun_questions.append(str(generic_questions[random.randrange(0, len(generic_questions) - 1)]
-                                  .substitute(noun=annotated_noun)))
+                                  .substitute({argument_name: string})))
 
     return noun_questions
 
@@ -191,6 +191,20 @@ def check_word_similarity(word: str,
     return False
 
 
+def get_simplified_nouns_from_text(text: str) -> List[str]:
+    entity_extractor_response = requests.get('http://127.0.0.1:5000/', json={"text": text})
+    annotated_text = entity_extractor_response.json()
+    # NOUN, VERB, ADJ, etc
+    pos = annotated_text.get('pos')
+    # Simplified words
+    lemma = annotated_text.get('lemma')
+    nouns = []
+    for i in range(0, len(lemma)):
+        if pos[i] == 'NOUN':
+            nouns.append(lemma[i])
+    return nouns
+
+
 class ActionAnalizarEntradas(Action):
 
     def name(self) -> Text:
@@ -202,22 +216,18 @@ class ActionAnalizarEntradas(Action):
             tracker: Tracker,
             domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
+        # nouns from a text
+        nouns = get_simplified_nouns_from_text(tracker.latest_message['text'])
+        # discard not wanted nouns
+        filtered_nouns = [x for x in nouns if not check_word_similarity(x, ['Aplicacion', 'Sistema'],
+                                                                        levenshtein_distance=3)]
+        generic_questions = [
+            Template('Contame de donde tenes que obtener $noun y si hay que hacerlo de manera regular'),
+            Template('De donde sacamos $noun ?'),
+            Template('Explicame un poco como pensas trabajar con $noun')]
 
-        text = tracker.latest_message['text']
-        entity_extractor_response = requests.get('http://127.0.0.1:5000/', json={"text": text})
-        annotated_text = entity_extractor_response.json()
-        # NOUN, VERB, ADJ, etc
-        pos = annotated_text.get('pos')
-        # Simplified words
-        lemma = annotated_text.get('lemma')
-        nouns = []
-        for i in range(0, len(lemma) - 1):
-            if pos[i] == 'NOUN':
-                nouns.append(lemma[i])
-        nouns = [x for x in nouns if check_word_similarity(x, ['Aplicacion', 'Sistema'], levenshtein_distance=3)]
-        # Generar preguntas automagicamente para la entrada
-        return [SlotSet('termino_entradas', False), SlotSet('preguntas_entrada', generate_question_for_nouns(
-            nouns))]
+        return [SlotSet('termino_entradas', False),
+                SlotSet('preguntas_entrada', fill_simple_templates(filtered_nouns, generic_questions, "noun"))]
 
 
 class ActionAnalizarSalidas(Action):
@@ -231,10 +241,15 @@ class ActionAnalizarSalidas(Action):
             tracker: Tracker,
             domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
-        text = tracker.latest_message['text']
-        # TODO Generar preguntas automagicamente para la salida
+        # nouns from a text
+        nouns = get_simplified_nouns_from_text(tracker.latest_message['text'])
+        nouns = [x for x in nouns if not check_word_similarity(x, ['Aplicacion', 'Sistema'], levenshtein_distance=3)]
+        generic_questions = [
+            Template('Que hacemos con $noun ?'),
+            Template('Como procesamos $noun ?')]
+
         return [SlotSet('termino_salidas', False),
-                SlotSet('preguntas_salida', ["De que color es el caballo blanco de San Martín a la SALIDA del baile?"])]
+                SlotSet('preguntas_salida', fill_simple_templates(nouns, generic_questions, "noun"))]
 
 
 class ActionGuardarEntrada(Action):

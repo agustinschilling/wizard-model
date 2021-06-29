@@ -10,4 +10,7 @@ configurar en la linea 7 del archivo app.py la ruta a la carpeta de la carpeta e
 
 en una terminal abrir el venv y estando en la carpeta entity extractor
 
+```
+python -m flask run
+```
 
