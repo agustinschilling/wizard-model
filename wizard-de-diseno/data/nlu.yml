@@ -28,14 +28,11 @@ nlu:
 
 - intent: requerimiento
   examples: |
-    - El sistema tiene usuarios que se comunican a través de mensajes privados
+    - Quiero un sistema que tenga usuarios que se comunican a través de mensajes privados
     - Los usuarios deben tener una ventana donde ver su estado de cuenta
     - El registro maestro de clientes tendrá asociado un límite de crédito. 
     - El sistema permitirá aprobar, cambiar o actualizar planes y cronogramas de proyecto.
-# TODO: AGREGAR MAS EJEMPLOS DE REQUERIMIENTOS MAS GENERICOS (TENGO UNA APLICACION QUE..., EL SISTEMA DEBE....)
-
-- intent: requerimiento_salida
-  examples: |
     - El sistema tiene que determinar un conjunto de frases chequeadas.
-    - El usuario debe poder enviar mensajes
-    - Un requerimiento de salida
+    - Es una aplicación para detectar mails que son spam
+    - Necesito una app web que permita detectar estafas online
+    - Quiero hacer un sistema donde cada usuario puede subir archivos y compartirlos con los demás

@@ -5,7 +5,6 @@ intents:
 - basta 
 - negacion
 - requerimiento
-- requerimiento_salida
 
 responses:
   utter_saludo:

@@ -8,7 +8,7 @@ stories:
   - action: action_analizar_entradas
   - intent: basta
   - action: utter_pregunta_salidas    # Algo aca en el medio para pasar a requis de salida
-  - intent: requerimiento_salida
+  - intent: requerimiento
   - action: action_analizar_salidas
 
 
