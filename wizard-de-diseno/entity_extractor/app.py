@@ -23,7 +23,7 @@ from question_generation import get_question
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
+def get_pos_tag():
     print(request.json)
     text = str(request.json['text'])
     if isinstance(text, str):

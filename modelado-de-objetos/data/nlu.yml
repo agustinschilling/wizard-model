@@ -9,6 +9,7 @@ nlu:
     - El [usuario](MODEL) podrá [visualizar](EVENT) todos los [pedidos](MODEL) [realizados](PROPERTY) con una [descripción](PROPERTY) [detallada](PROPERTY)
 - intent: double_chain
   examples: | 
+    - la [interfaz](COMPONENT) permite [visualizar](EVENT) las [frases similares](MODEL) a partir de una [API](COMPONENT)
     - Los [mails](COMPONENT) [contendrán](EVENT) las [frases similares](MODEL) [encontradas](EVENT) en los [últimos días](PROPERTY)
     - La [aplicación](SYSTEM) [envíara](EVENT) [mails](COMPONENT) [diarios](PROPERTY) a una lista de [suscriptos](MODEL)
     - La [aplicación](SYSTEM) tiene que [extraer](EVENT) [frases chequeables](MODEL) de esas [notas](MODEL)
@@ -46,7 +47,10 @@ nlu:
     - Al [crear](EVENT) la [lista de precios](MODEL) se [agregarán](EVENT) los [materiales](MODEL) e [ítems](MODEL), los cuales deben estar [registrados](EVENT) previamente en el [maestro de materiales](MODEL). 
     - Los [usuarios](MODEL) deben [ingresar](EVENT) al [sistema](SYSTEM) con un [nombre de usuario](PROPERTY) y [contraseña](PROPERTY).
 - intent: simple_chain
-  examples: |    
+  examples: |  
+    - la [interfaz](COMPONENT) se [conecta](EVENT) a traves de una [API](COMPONENT)
+    - las [frases verificadas](MODEL) [tienen](EVENT) una [calificación](PROPERTY)
+    - para [detectar](EVENT) las [frases chequeables](MODEL) necesitamos algun tipo de [inteligencia artificial](COMPONENT)
     - Las [frases similares](MODEL) que se encuentren deberán [almacenarse](EVENT) para ser [enviadas](EVENT) por [mail](COMPONENT)
     - Las [notas](MODEL) deben [actualizarse](EVENT) mínimo dos veces [por día](PROPERTY)
     - La [contraseña](MODEL) [será](EVENT) [cifrada](PROPERTY)
