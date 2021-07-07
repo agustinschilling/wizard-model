@@ -3,7 +3,7 @@ from .entities import Entity
 from .architecture_graph import GraphManager
 import os
 import random
-
+import json
 
 # path of your model
 rasa_model_path = "actions/models/modelado/nlu"
@@ -23,14 +23,20 @@ def rasa_output(text):
     return result
 
 def update_graph(id,text):
+    """
+    Actualizar el grafo con un texto nuevo, 
+    primero sacando entidades y requerimientos
+    """
     # Get analisis
     intent,entities = parse_req(text)
-    print_summary(entities)
 
     # Update graph
     graph_manager = GraphManager(id)
     graph_manager.update_graph_with_new_entities(entities,intent)
     graph_manager.save()
+
+    # Actualizar el dump/info
+    guardar_prediccion(text, entities, intent)
 
     # Image
     graph_image_file = graph_manager.get_image_file()
@@ -38,6 +44,9 @@ def update_graph(id,text):
 
 
 def remove_graph(id):
+    """
+    Elimina la ultima version del grafo
+    """
     # Remove last graph
     graph_manager = GraphManager(id)
     graph_manager.remove_last()
@@ -47,38 +56,67 @@ def remove_graph(id):
     return "Ahí lo corregí. Cómo avanzamos ahora?",os.path.abspath(graph_image_file)
     
 def parse_req(text):
+    """
+    Dado un requerimiento lo analiza y extrae entidades e intencion
+    """
+    # Genera el output de rasa para un texto
     rasa_parsing = rasa_output(text)
     intent = rasa_parsing['intent']['name']
     entities = parse_entities(rasa_parsing['entities'])
-
+    print_summary(entities)
     return intent, entities
 
-def get_pregunta(text):
-    # Get analisis
-    intent,entities = parse_req(text)
-    print_summary(entities)
-    relevant_entities = [e for e in entities if e.category == "MODEL" or e.category == "COMPONENT"]
-
-    for entity in relevant_entities:
-        if not mongo_client.get_conocimiento(entity.name):
-            options = [ "Contame que entendés por " + entity.name, 
-            "A qué te referís con " + entity.name +"?",
-            "Que significa " + entity.name + " en este contexto?"]
-            return random.choice(options)
-        
-    if len(relevant_entities) >= 2:
-        return "Explicame un poco la relacion entre " + relevant_entities[0].name + " y " + relevant_entities[1].name + " y cómo interactuan entre sí"
+def guardar_prediccion(text, entities, intent, preguntas =[]):
+    # Almacena informacion para luego mejorar el entrenamiento
+    prediccion = {
+            "preguntas": preguntas,
+            "texto": text,
+            "entidades": [(e.name, e.category) for e in entities],
+            "intent": intent
+    }
     
-def save_conocimiento(text):
-    intent,entities = parse_req(text)
-    print_summary(entities)
-    relevant_entities = [e for e in entities if e.category == "MODEL" or e.category == "COMPONENT"]
+    # Opening JSON file
+    with open('data.json', 'r') as openfile:
+        # Reading from json file
+        data = json.load(openfile)
+    
+    if data:
+        data.append(prediccion)
+    else:
+        data = [prediccion]
 
-    for entity in relevant_entities:
-        if not mongo_client.get_conocimiento(entity.name):
-            mongo_client.save_conocimiento(entity.name, text,entity.category)
-            return 
-        
+    with open("data.json", 'w') as file:
+        json.dump(data, file)
+
+def get_questions(text):
+    # Genera preguntas para un texto
+    intent, entities = parse_req(text)
+    print("Intent:" + intent)
+
+    preguntas = []
+    for i, entity in enumerate(entities):
+        if entity.category == "MODEL":
+            preguntas.append("Contame de donde surge " + entity.name + " o cuál te imaginas que es su función")
+            #preguntas.append("Que propiedades estarían asociadas a " + entity.name)
+            #preguntas.append("Cuál sería el proceso para obtener " + entity.name)
+        elif entity.category == "EVENT":
+            if i+1 < len(entities) and entities[i+1].category != "EVENT":
+                preguntas.append("Cómo implementarias el proceso que involucra " + entity.name + " " + entities[i+1].name)
+            else:
+                preguntas.append("Con que elementos se relaciona el proceso de " + entity.name + " y cómo lo hace?")
+        elif entity.category == "COMPONENT":
+            preguntas.append("Cómo se relaciona " + entity.name + " con las otras partes del sistema?")
+
+    model_entities = [e.name for e in entities if e.category == "MODEL"]
+    if len(model_entities) > 1:
+        if "chain" in intent:
+            preguntas.append("Explicame la relación entre " + model_entities[-2] + " y "+ model_entities[-1] + " si existe")
+        else:
+            preguntas.append("Cómo explicarías la relación entre a " + model_entities[0] + " y "+ model_entities[1])
+
+    guardar_prediccion(text, entities, intent, preguntas)
+
+    return preguntas
 
 #
 # Helper functions  

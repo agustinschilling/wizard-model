@@ -1,9 +1,9 @@
 version: '2.0'
  
 intents:
-- pedido_ayuda_modelado
 - basta 
 - negacion
+- afirmacion
 - requerimiento
 
 responses:
@@ -22,51 +22,25 @@ responses:
   - text: Dame mas data
   utter_feedback:
   - text: que te pareció?
-  utter_pregunta_entradas:
-  - text: Perfecto.. Contame un poco ahora de los datos de entrada que necesita tu aplicación
-  utter_pregunta_salidas:
-  - text: Y cuál sería el producto final, o la salida de programa?
-  - text: Bien. Y cuál sería la salida esperada?
+  utter_pregunta_especificaciones:
+  - text: Genial. Contáme un poco más en detalle cuál sería el producto final, o la salida de programa?
+  utter_pregunta_final:
+  - text: Nos falto hablar de algo?
+  utter_pregunta_de_que:
+  - text: Sobre que cosas nos falto charlar?
 
-actions:
+actions:  
 - action_default_fallback
 - action_modelado
 - action_modelado_rechazo
-- action_analizar_entradas
-- action_analizar_salidas
-- action_ask_respuesta_entrada
-- action_ask_respuesta_salida
-- action_guardar_entrada
-- action_guardar_salida
+- action_analizar_especificaciones
+- action_guardar_feature
+- action_rechazar_feature
 
-forms:
-  preguntas_entrada_form:
-    required_slots: 
-      respuesta_entrada:
-        - type: from_text
-  preguntas_salida_form:
-    required_slots: 
-      respuesta_salida:
-        - type: from_text
-
-slots:
-  respuesta_entrada:
-    type: text
-  respuesta_salida:
-    type: text
-  entidades_entrada:
-    type: any
-  entidades_salida:
-    type: any
-  preguntas_entrada:
-    type: any
-  preguntas_salida:
-    type: any
-  preguntas_relaciones:
+slots:  
+  preguntas:
     type: any
   features:
     type: any
-  termino_entradas:
-    type: bool
-  termino_salidas:
+  termino_preguntas:
     type: bool

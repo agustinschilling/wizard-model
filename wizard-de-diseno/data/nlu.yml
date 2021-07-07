@@ -1,12 +1,5 @@
 version: "2.0"
 nlu:
-- intent: pedido_ayuda_modelado
-  examples: |
-    - Necesito ayuda para modelar una solucion
-    - Me ayudas a modelar una solución?
-    - Che, necesito una mano para diseñar una solución
-    - Danos una mano para analizar un problema
-
 - intent: basta
   examples: |
     - Listo
@@ -25,6 +18,18 @@ nlu:
     - Así no
     - Te equivocas
     - No, te quedo mal
+    - Nidea
+    - No sé
+
+- intent: afirmacion
+  examples: |
+    - Si re
+    - Si, nos falto un par de cosas
+    - Si falta
+    - Sisi
+    - Se
+    - Si, nos falto hablar de
+    - Si, tenemos que hablar de
 
 - intent: requerimiento
   examples: |

@@ -171,3 +171,5 @@ env
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/wizard-model.iml
 /.idea/misc.xml
+wizard-de-diseno/entity_extractor/explain_document_lg_es/
+wizard-de-diseno/data.json

@@ -5,8 +5,8 @@ from typing import Dict
 import pygraphviz as pgv
 import enchant
 from datetime import datetime
-import mongo_client
-import entities as entities_file
+from actions import mongo_client
+from actions import entities as entities_file
 
 
 class GraphManager:
@@ -261,7 +261,12 @@ class GraphManager:
         @author: gcapozzo
         """
         # TODO check multiple edges
-        to_delete_node = self.graph.get_node(node_to_delete_name)
+        try:
+            to_delete_node = self.graph.get_node(node_to_delete_name)
+        except:
+            print("NO EXISTE")
+            return 
+            
         # no in_neighbours
         if len(self.graph.in_neighbors(to_delete_node)) is 0:
             # out_neighbours with label

@@ -3,17 +3,116 @@ stories:
 - story: interactive_story_1
   steps:
   - intent: requerimiento
-  - action: utter_pregunta_entradas
+  - action: utter_pregunta_especificaciones
   - intent: requerimiento
-  - action: action_analizar_entradas
-  - intent: basta
-  - action: utter_pregunta_salidas    # Algo aca en el medio para pasar a requis de salida
+  - action: action_analizar_especificaciones
   - intent: requerimiento
-  - action: action_analizar_salidas
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: null
+  - intent: requerimiento
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: true
+  - action: utter_pregunta_final
+  - intent: negacion
+  - action: action_modelado
 
 
+- story: interactive_story_2
+  steps:
+  - intent: requerimiento
+  - action: utter_pregunta_especificaciones
+  - intent: requerimiento
+  - action: action_analizar_especificaciones
+  - intent: requerimiento
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: null
+  - intent: negacion
+  - action: action_rechazar_feature
+  - slot_was_set:
+    - termino_preguntas: null
+  - intent: requerimiento
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: true
+  - action: utter_pregunta_final
+  - intent: requerimiento
+  - action: utter_pregunta_de_que
+  - intent: requerimiento
+  - action: action_analizar_especificaciones
+  - intent: requerimiento
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: true
+  - action: utter_pregunta_final
+  - intent: negacion
+  - action: action_modelado
 
 
+- story: interactive_story_3
+  steps:
+  - intent: requerimiento
+  - action: utter_pregunta_especificaciones
+  - intent: requerimiento
+  - action: action_analizar_especificaciones
+  - intent: requerimiento
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: null
+  - intent: negacion
+  - action: action_rechazar_feature
+  - slot_was_set:
+    - termino_preguntas: null
+  - intent: requerimiento
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: true
+  - action: utter_pregunta_final
+  - intent: afirmacion
+  - action: utter_pregunta_de_que
+  - intent: requerimiento
+  - action: action_analizar_especificaciones
+  - intent: requerimiento
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: null
+  - intent: requerimiento
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: true
+  - action: utter_pregunta_final
+  - intent: negacion
+  - action: action_modelado
+
+- story: interactive_story_4
+  steps:
+  - intent: requerimiento
+  - action: utter_pregunta_especificaciones
+  - intent: requerimiento
+  - action: action_analizar_especificaciones
+  - intent: requerimiento
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: true
+  - action: utter_pregunta_final
+  - intent: afirmacion
+  - action: utter_pregunta_de_que
+  - intent: requerimiento
+  - action: action_analizar_especificaciones
+  - intent: requerimiento
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: null
+  - intent: requerimiento
+  - action: action_guardar_feature
+  - slot_was_set:
+    - termino_preguntas: true
+  - action: utter_pregunta_final
+  - intent: negacion
+  - action: action_modelado
+  
 # TODO: TESTEAR
 # - story: interactive_story_2
 #   steps:
