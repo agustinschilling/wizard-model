@@ -1,0 +1,29 @@
+Es una aplicacion web que muestra las frases chequeadas que dijeron los politicos argentinos en la ultima semana
+
+1- De donde surgen frases chequeadas?/ Cómo obtenes frases chequeadas?
+2- Como es el proceso de muestra/mostrar frases chequeadas?
+3- Que caracteristicas se asocian a frases chequeadas?
+4- Dame mas detalles de la relacion entre frases chequeadas y politicos? 
+5- Que propiedades se asocian a politicos?/ Que informacion (extra necesitamos saber/define a) de politicos?
+
+1. las frases chequeadas estan disponibles en una api que proveen los chequeadores
+2. Las frases chequeadas se muestran en una pagina web
+3. Tienen una calificacion, un texto y una nota donde se explica el chequeo 
+4. Todas las frases chequeadas estan asociadas al politico que las dijo 
+5. Los politicos tienen un nombre, un partido y un cargo 
+
+# TODO 1: Segunda ronda de preguntas que solo toma las entidades nuevas (y relaciones nuevas) de esta lista de features
+- Almacenar las entiedades y grupos de entidades para las que ya se generaron preguntas
+- Almacenar las preguntas que ya se hicieron 
+- Ver de agregar las entidds que faltan en una respuesta analizando la pregunta 
+- Cuando se termina la primera tanda de preguntas y esta por cortar, si no tenemos suf feats o algo, hacer una nueuva tanda que solo genere preguntas para las entidadees y grupos de entidadees que no tienen preguntas hechas
+- Agregar estas nueuvas preguntas y seguir iterando
+- Estableceer un punto de corte y testear
+
+Generamos gráfico: asdf.jpg
+# TODO 2: Analizando el gráfico y asumiendo un patron (ponele que rest o MVC, viendo las ca), sugerir una implementacion en un lenguaje particular 
+- A partir de algunas palabras o entidadees clave (web, api etc) detectar rest o MVC 
+- Armar recomendacion donde definimos que es modelo, que controller, que funciones y propiedadees tienen, que conectores se necesitan etc etc
+
+# TODO 3: reentrenar y perfeccionar el ejemplo para que quede pitucon
+- cuando este listo lo otro

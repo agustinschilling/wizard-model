@@ -9,6 +9,7 @@ nlu:
     - El [usuario](MODEL) podrá [visualizar](EVENT) todos los [pedidos](MODEL) [realizados](PROPERTY) con una [descripción](PROPERTY) [detallada](PROPERTY)
 - intent: double_chain
   examples: | 
+    - Es una [aplicacion web](COMPONENT) que [muestra](EVENT) las [frases chequeadas](MODEL) que [dijeron](EVENT) los [politicos](MODEL) [argentinos](PROPERTY) en la [ultima semana](PROPERTY)
     - la [interfaz](COMPONENT) permite [visualizar](EVENT) las [frases similares](MODEL) a partir de una [API](COMPONENT)
     - Los [mails](COMPONENT) [contendrán](EVENT) las [frases similares](MODEL) [encontradas](EVENT) en los [últimos días](PROPERTY)
     - La [aplicación](SYSTEM) [envíara](EVENT) [mails](COMPONENT) [diarios](PROPERTY) a una lista de [suscriptos](MODEL)
@@ -70,6 +71,7 @@ nlu:
     - Los [libros](MODEL) de [venta](MODEL) y de [compras](MODEL) serán [emitidos](EVENT) en el [formato](PROPERTY) [establecido](EVENT) por las [autoridades tributarias](MODEL) de dicha materia.
 - intent: star
   examples: |
+    - Los [politicos](MODEL) [tienen](EVENT) un [nombre](PROPERTY), un [partido](PROPERTY) y un [cargo](PROPERTY) 
     - El [sistema](SYSTEM) [tendrá](EVENT) un [usuario](MODEL) y [contraseña](MODEL)
     - el [sistema](SYSTEM) deberá [solicitar](EVENT): [Nombre](PROPERTY) del cliente, [Apellidos](PROPERTY) del cliente, [Sexo](PROPERTY), [Documento](PROPERTY) de identidad, [Fecha de nacimiento](PROPERTY), [Correo electrónico](PROPERTY), Dirección](PROPERTY) de residencio, [Teléfono](PROPERTY)
     - El [sistema](SYSTEM) [permitirá](EVENT) [aprobar](EVENT), [cambiar](EVENT) o [actualizar](EVENT) [planes](MODEL) y [cronogramas de proyecto](MODEL).
