@@ -7,7 +7,7 @@ import enchant
 from datetime import datetime
 from actions import mongo_client
 from actions import entities as entities_file
-
+from actions.entities import Entity
 
 class GraphManager:
     """
@@ -160,13 +160,18 @@ class GraphManager:
         Agregar una arista entre dos nodos. 
         Si la arista ya existe, simplemente actualizar la etiqueta
         """
-        self.graph.add_edge(node1.name, node2.name, label=entity.name, color=COLORS[self.color_idx])  
+        if self.graph.has_edge(node1.name,node2.name):
+            edge = self.graph.get_edge(node1.name, node2.name) 
+            self.update_edge_label(edge,entity)
+        else:
+            self.graph.add_edge(node1.name, node2.name, label=entity.name, color=COLORS[self.color_idx])    
 
     def add_edge(self,node1,node2):
         """
         Agregar arista sin etiqueta entre dos nodos
-        """
-        self.graph.add_edge(node1.name, node2.name, color=COLORS[self.color_idx])  
+        """ 
+        if not self.graph.has_edge(node1.name,node2.name):
+            self.graph.add_edge(node1.name, node2.name, color=COLORS[self.color_idx])  
 
     def find_nodes_connected_by_event(self,event,nodes):   
         """
@@ -279,6 +284,19 @@ class GraphManager:
                 self.graph.add_edge(old_edge.attr['label'], out_node, color=old_edge.attr['color'])
                 self.graph.remove_edge(to_delete_node, out_node)
             self.graph.remove_node(to_delete_node)
+
+    def get_entities_grouped(self):
+        entities = {"MODEL":[],"PROPERTY":[],"EVENT":[],"COMPONENT":[]}
+        for node in self.graph.nodes():
+            cat = Entity.get_category_by_shape(node.attr['shape'])
+            if cat and cat in entities:
+                entities[cat].append(node.get_name())
+
+        for edge in self.graph.edges():
+            if edge.attr['label']:
+                entities["EVENT"].append(edge.attr['label'])
+
+        return entities
 
     def detect_requirements_starting_from_nodes(self):
         start_reqs = {}

@@ -9,7 +9,7 @@ nlu:
     - El [usuario](MODEL) podrá [visualizar](EVENT) todos los [pedidos](MODEL) [realizados](PROPERTY) con una [descripción](PROPERTY) [detallada](PROPERTY)
 - intent: double_chain
   examples: | 
-    - Es una [aplicacion web](COMPONENT) que [muestra](EVENT) las [frases chequeadas](MODEL) que [dijeron](EVENT) los [politicos](MODEL) [argentinos](PROPERTY) en la [ultima semana](PROPERTY)
+    - Es una [aplicacion web](COMPONENT) que [muestra](EVENT) las [frases chequeadas](MODEL) que dijeron los [politicos](MODEL) [argentinos](PROPERTY) en la [ultima semana](PROPERTY)
     - la [interfaz](COMPONENT) permite [visualizar](EVENT) las [frases similares](MODEL) a partir de una [API](COMPONENT)
     - Los [mails](COMPONENT) [contendrán](EVENT) las [frases similares](MODEL) [encontradas](EVENT) en los [últimos días](PROPERTY)
     - La [aplicación](SYSTEM) [envíara](EVENT) [mails](COMPONENT) [diarios](PROPERTY) a una lista de [suscriptos](MODEL)

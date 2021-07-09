@@ -60,10 +60,10 @@ class ActionModelado(Action):
         features = tracker.get_slot('features')
         for feat in features:
             # Actualizar una nueva versión del gráfico
-            utter, image = modelado.update_graph(tracker.sender_id, feat)
+            sugerencia, image = modelado.update_graph(tracker.sender_id, feat)
         
         # Mostrar mensaje e imagen
-        dispatcher.utter_message(text="Se me ocurrio esto para tu aplicación, que pensas?")
+        dispatcher.utter_message(text=sugerencia)
         dispatcher.utter_message(image=image)
         return []
 

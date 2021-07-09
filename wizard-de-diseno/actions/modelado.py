@@ -1,6 +1,7 @@
 from rasa.nlu.model import Interpreter
-from .entities import Entity
-from .architecture_graph import GraphManager
+from actions.entities import Entity
+from actions.architecture_graph import GraphManager
+from actions.implementacion import get_sugerencia_implementacion
 import os
 import random
 import json
@@ -10,8 +11,6 @@ rasa_model_path = "actions/models/modelado/nlu"
 
 # create an interpreter object
 interpreter = Interpreter.load(rasa_model_path)
-
-from actions import mongo_client
 
 def rasa_output(text):
     """
@@ -40,7 +39,8 @@ def update_graph(id,text):
 
     # Image
     graph_image_file = graph_manager.get_image_file()
-    return "Qué te parece esto?",os.path.abspath(graph_image_file)
+    implementacion = get_sugerencia_implementacion(graph_manager)
+    return implementacion,os.path.abspath(graph_image_file)
 
 
 def remove_graph(id):
@@ -134,3 +134,17 @@ def print_summary(entities):
     for e in entities:
         print(f" - {e.category}: {e.name}")
     print("*************************")
+
+if __name__=="__main__":
+    text = "La interfaz web se conecta con la base para mostrar las frases chequeables que tienen una calificacion"
+    id = "joaco_test3"
+    # Get analisis
+    intent,entities = parse_req(text)
+
+    # Update graph
+    graph_manager = GraphManager(id)
+    graph_manager.update_graph_with_new_entities(entities,intent)
+    graph_manager.save()
+
+    pattern = get_sugerencia_implementacion(graph_manager)
+    import pdb; pdb.set_trace()
