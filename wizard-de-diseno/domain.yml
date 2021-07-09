@@ -37,9 +37,7 @@ actions:
 - action_guardar_feature
 - action_rechazar_feature
 
-slots:  
-  preguntas:
-    type: any
+slots:
   features:
     type: any
   termino_preguntas:
