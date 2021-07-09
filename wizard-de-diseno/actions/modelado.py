@@ -150,7 +150,7 @@ class QuestionsData:
         :return: next question without criteria
         """
         next_q = self.remaining_questions.pop()
-        self.asked_questions.append(next)
+        self.asked_questions.append(next_q)
         return next_q
 
     def remaining_size(self) -> int:
@@ -264,11 +264,11 @@ def remove_repeated_questions(new_q: List[Question],
         for q in new_q:
             new_q_ent = q.get_used_entities()
             if not check_similar_entities(old_q_ent, new_q_ent, ratio):
-                q_to_delete.append(q)
-                print(colored(q.get_filled_question() + "no es similar a " + old_q.get_filled_question(),
+                print(colored(q.get_filled_question() + " no es similar a " + old_q.get_filled_question(),
                               color='blue'))
             # TODO borrar print de debug
             else:
+                q_to_delete.append(q)
                 print(colored("detecto similar a: " + q.get_filled_question() + "y" + old_q.get_filled_question(),
                               color='red'))
     x = [n_q for n_q in new_q if n_q not in q_to_delete]

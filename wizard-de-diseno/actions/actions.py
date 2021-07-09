@@ -97,38 +97,6 @@ class ActionModeladoRechazo(Action):
         dispatcher.utter_message(image=image)
         return []
 
-
-def get_questions(text: str, asked: List, remaining: List) -> List[str]:
-    """ 
-    Funcion que trae preguntas para una especificacion
-    """
-    # Tambien quita las repetidas en la lista
-    return remove_similars(modelado.get_questions(text, preguntas, preguntas))
-
-
-def remove_similars(str_list):
-    """
-    Funcion que saca las frases repetidas
-    (no tienen que ser matches exactos, usan un algo de proxmidad)
-    """
-    # Tengo que tener al menos dos items
-    if len(list) > 1:
-        # El primero siempre se carga xq no puede estar repetido
-        clean_list = [str_list[0]]
-        # Para cada uno de los que queda me fijo si ya esta
-        for item in list[1:]:
-            has_similar = False
-            for clean_item in clean_list:
-                if similar(item, clean_item) > 0.8:
-                    has_similar = True
-                    break
-            if not has_similar:
-                clean_list.append(item)
-        return clean_list
-    else:
-        return list
-
-
 def similar(a, b):
     """
     Calcula un valor de similaridad para un par de frases
@@ -137,7 +105,6 @@ def similar(a, b):
 
 
 class ActionAnalizarEspecificaciones(Action):
-
     """
     Dada una especificacion inicial genera un conjunto de preguntas iniciales
     """
@@ -192,6 +159,13 @@ class ActionGuardarFeature(Action):
     ) -> List[Dict[Text, Any]]:
         # Obtengo el texto de respuesta
         text = tracker.latest_message['text']
+        
+         # obtengo las preguntas para esta especificacion, dando el contexto actual
+        questions = modelado.get_questions(text, modelado.QuestionsData.asked_questions,
+                                           modelado.QuestionsData.remaining_questions)
+
+        for q in questions:
+            ActionModelado.questions.add_question(q)
 
         # actualizo las features. Me fijo, si no existen creo la primera entrada
         features = tracker.get_slot('features')
