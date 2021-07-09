@@ -3,6 +3,7 @@ SYSTEM = "Sistema"
 class Entity:
     colors = {"MODEL":"black","SYSTEM":"black","PROVIDER":"black","PROPERTY":"black","COMPONENT":"black"}
     shapes = {"MODEL":"box","SYSTEM":"oval","PROVIDER":"box","PROPERTY":"house","COMPONENT":"diamond"}
+    categories = ["MODEL","PROPERTY","COMPONENT"]
 
     def __init__(self, entity_object):
         self.category = entity_object['entity']
@@ -40,3 +41,10 @@ class Entity:
 
     def get_shape(self):
         return Entity.shapes[self.category]
+
+    @staticmethod
+    def get_category_by_shape(shape):
+        for key, value in Entity.shapes.items():
+            if value == shape:
+                return key
+        return None
