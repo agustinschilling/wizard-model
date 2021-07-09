@@ -218,7 +218,7 @@ class GraphManager:
         for node in nodes[1:]:
             if not self.graph.has_edge(prev_node.name,node.name):
                 self.add_edge(prev_node,node)
-                self.add_edge(node,prev_node)
+                #self.add_edge(node,prev_node)
             prev_node = node
 
     def update_graph_with_chained_entities(self,entities):
@@ -248,7 +248,7 @@ class GraphManager:
         main_node = nodes[0]
         for idx, entity in enumerate(entities[:-1]):
             next_entity = entities[idx+1]
-            if entity.is_event() and next_entity.is_node() or next_entity.is_property() and next_entity != main_node:
+            if entity.is_event() and next_entity.is_node() and next_entity != main_node:
                 self.add_labeled_edge(main_node,next_entity,entity)
 
         for node in nodes[1:]:
@@ -320,7 +320,6 @@ COLORS = [
     "chartreuse",
     "chocolate",
     "darkgreen"	,
-    "darkblue",
     "darkolivegreen1",
     "deeppink",
     "gold3"

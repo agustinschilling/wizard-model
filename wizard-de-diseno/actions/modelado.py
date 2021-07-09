@@ -166,39 +166,43 @@ def get_questions(text: str, asked: List[Question], remaining: List[Question]) -
     :return: list of NEW questions
     """
 
+    if len(asked) + len(remaining) > 7:
+        return []
+
     # Genera preguntas para un texto
     intent, entities = parse_req(text)
     print("Intent:" + intent)
 
-    # tag entities
-    entities_tagged = {"MODEL": [], "PROPERTY": [], "EVENT": [], "COMPONENT": []}
-    for entity in entities:
-        entities_tagged[entity.category].append(entity)
-
     preguntas = []
     for i, entity in enumerate(entities):
         if entity.category == "MODEL":
-            preguntas.append(Question("Contame de donde surge $model o cuál te imaginas que es su función",
+            preguntas.append(Question("De donde se obtiene $model",
                                       {"model": entity}))
-            # preguntas.append("Que propiedades estarían asociadas a " + entity.name)
+            preguntas.append(Question("Que propiedades componen o se relacionan con $model",
+                                      {"model": entity}))
+            #preguntas.append("De donde surge  " + entity.name)
             # preguntas.append("Cuál sería el proceso para obtener " + entity.name)
         elif entity.category == "EVENT":
-            if i + 1 < len(entities) and entities[i + 1].category != "EVENT":
-                preguntas.append(Question("Cómo implementarias el proceso que involucra $event $entity",
+            if i + 1 < len(entities)-1 and entities[i + 1].category == "MODEL" or entities[i+1].category == "COMPONENT":
+                preguntas.append(Question("Cómo sería el proceso de '$event $entity'",
                                           {"event": entity, "entity": entities[i + 1]}))
             else:
-                preguntas.append(Question("Con que elementos se relaciona el proceso de $event y cómo lo hace?",
+                preguntas.append(Question("A qué te referís con $event?",
                                           {"event": entity}))
         elif entity.category == "COMPONENT":
-            preguntas.append(Question("Cómo se relaciona $component con las otras partes del sistema?",
+            preguntas.append(Question("Qué relación tiene $component con las otras partes del sistema?",
                                       {"component": entity}))
-    """
-    model_entities = [e for e in entities if e.category == "MODEL" or e.category == "COMPONENT"]
-    if len(model_entities) > 1:
-        for e1, e2 in itertools.combinations(model_entities, 2):
-            preguntas.append(Question("Contame mas informacion de como se relacionan $e1 y $e2",
-                                      {"e1": e1, "e2": e2}))
-    """
+    
+    # model_entities = [e for e in entities if e.category == "MODEL" or e.category == "COMPONENT"]
+    # if len(model_entities) > 1:
+    #     preguntas.append(Question("Dame más detalles de la relación entre $e1 y $e2",
+    #                                   {"e1": model_entities[0], "e2": model_entities[1]}))
+    #     """
+    #     for e1, e2 in itertools.combinations(model_entities, 2):
+    #         preguntas.append(Question("Contame mas informacion de como se relacionan $e1 y $e2",
+    #                                   {"e1": e1, "e2": e2}))
+    #     """
+    
     print([x.get_filled_question() for x in preguntas])
     return remove_repeated_questions(preguntas, asked, remaining, 0.8)
 

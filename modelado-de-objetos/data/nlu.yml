@@ -1,12 +1,6 @@
 version: "2.0"
 
 nlu:
-- intent: double_chain_and_star
-  examples: |   
-    - El [sistema](SYSTEM) [enviará](EVENT) un [correo electrónico](MODEL) cuando se [registre](EVENT) alguna de las siguientes [transacciones](MODEL) : [pedido de venta](MODEL) de [cliente](MODEL), [despacho de mercancía](MODEL) al [cliente](MODEL), [emisión de factura](MODEL) a [cliente](MODEL) y [registro de pago](MODEL) de [cliente](MODEL).
-    - El [sistema](SYSTEM) [enviará una alerta](EVENT) al [administrador del sistema](MODEL) cuando [ocurra](EVENT) alguno de los siguientes [eventos](MODEL): [Registro de nueva cuenta](PROPERTY), [ingreso al sistema por parte del cliente](PROPERTY), [2 o más intentos fallidos en el ingreso de la contraseña de usuario y cambio de contraseña de usuario](PROPERTY).
-    - El [proceso de compras](MODEL) en [el sistema](SYSTEM) [abarcará](EVENT) los siguientes [pasos](MODEL) y [transacciones](MODEL) : [Ingreso](EVENT) de la [requisición](MODEL), [emisión](EVENT) de la [solicitud de cotización](MODEL) y [emisión](EVENT) de la [orden de compra](MODEL).
-    - El [usuario](MODEL) podrá [visualizar](EVENT) todos los [pedidos](MODEL) [realizados](PROPERTY) con una [descripción](PROPERTY) [detallada](PROPERTY)
 - intent: double_chain
   examples: | 
     - Es una [aplicacion web](COMPONENT) que [muestra](EVENT) las [frases chequeadas](MODEL) que dijeron los [politicos](MODEL) [argentinos](PROPERTY) en la [ultima semana](PROPERTY)
@@ -22,8 +16,6 @@ nlu:
     - el [usuario](MODEL) podrá [registrar](EVENT) todo sus [datos personales](PROPERTY) en la [interfaz](COMPONENT) del [usuario](MODEL)
     - el [usuario](MODEL) podrá [realizar](EVENT) [compras](MODEL) de los [productos](MODEL) [exhibidos](EVENT) en el [portal web](COMPONENT).
     - El [usuario](MODEL) podrá [seleccionar](EVENT) los [productos](MODEL) de [mayor interés](PROPERTY).
-    - Al [ingresar](EVENT) [ordenes de entrega](MODEL), toda [orden de entrega](MODEL) estará [asociada](EVENT) a un [pedido de venta](MODEL).
-    - La [solución](SYSTEM) [validara](EVENT) automáticamente el [cliente](MODEL) [asociado](EVENT) a una [orden](MODEL) con el [sistema de gestión de contactos](PROVIDER).
     - Cualquier [intercambio de datos](EVENT) vía internet que [realice](EVENT) [el software](SYSTEM) se [realizará](EVENT) por medio del protocolo encriptado [https](PROVIDER).
     - El [sistema](SYSTEM) [manejará](EVENT) un [registro maestro](MODEL) de [clientes](MODEL). 
     - Se permitirá el [registro](EVENT) de [pedidos de compra](MODEL) con [datos obligatorios incompletos](PROPERTY), los cuales podrán [completarse](EVENT) posteriormente [modificando](EVENT) el [pedido](MODEL). 
@@ -49,12 +41,17 @@ nlu:
     - Los [usuarios](MODEL) deben [ingresar](EVENT) al [sistema](SYSTEM) con un [nombre de usuario](PROPERTY) y [contraseña](PROPERTY).
 - intent: simple_chain
   examples: |  
+    - Los [mensajes](MODEL) tienen [contactos](MODEL) asociados
+    - La [prioridad](PROPERTY) se [calcula](EVENT) utilizando un modulo de [inteligencia artificial](COMPONENT) con NLP
+    - Deberiamos [calcular](EVENT) una [prioridad](PROPERTY) para cada [mensaje](MODEL) 
+    - Es una [aplicacion web](COMPONENT) que me permita [organizar](EVENT) mis [mensajes](MODEL) de whatsapp
+    - Los [mensajes](MODEL) se [consultan](EVENT) en la [api de whatsapp](COMPONENT) 
     - la [interfaz](COMPONENT) se [conecta](EVENT) a traves de una [API](COMPONENT)
     - las [frases verificadas](MODEL) [tienen](EVENT) una [calificación](PROPERTY)
     - para [detectar](EVENT) las [frases chequeables](MODEL) necesitamos algun tipo de [inteligencia artificial](COMPONENT)
     - Las [frases similares](MODEL) que se encuentren deberán [almacenarse](EVENT) para ser [enviadas](EVENT) por [mail](COMPONENT)
     - Las [notas](MODEL) deben [actualizarse](EVENT) mínimo dos veces [por día](PROPERTY)
-    - La [contraseña](MODEL) [será](EVENT) [cifrada](PROPERTY)
+    - La [contraseña](PROPERTY) [será](EVENT) [cifrada](PROPERTY)
     - el [usuario](MODEL) podrá [actualizar](EVENT), [ingresa](EVENT) y [visualizar](EVENT) la [información registrada](MODEL) en el RQ4
     - El [sistema](SYSTEM) [controlará](EVENT) el acceso y lo [permitirá](EVENT) solamente a [usuarios](MODEL) [autorizados](PROPERTY).
     - Antes de poder [aprobarse](EVENT) los [datos](PROPERTY) del [pedido](MODEL) deben estar [completos](PROPERTY).
@@ -62,7 +59,6 @@ nlu:
     - El [sistema](SYSTEM) debe [manejar](EVENT) [listas de precios](MODEL).
     - El [usuario](MODEL) podrá [agregar](EVENT), [modificar](EVENT) o [eliminar](EVENT) [listas de precios](MODEL). 
     - Para cada [ítem] deberá [especificarse](EVENT) un [precio](PROPERTY).
-    - A cada [orden](MODEL) se le [asignará](EVENT) un [identificador único](PROPERTY), que será utilizado para [identificarla](EVENT) en todos los procesos subsecuentes que se realicen sobre esta.
     - Para [crear](EVENT) un [registro maestro](MODEL) de [cliente](MODEL), se [solicitará](EVENT) como mínimo el [nombre del cliente](PROPERTY) y su [número de identificación fiscal](PROPERTY). 
 - intent: star_and_double_chain
   examples: | 
@@ -71,8 +67,10 @@ nlu:
     - Los [libros](MODEL) de [venta](MODEL) y de [compras](MODEL) serán [emitidos](EVENT) en el [formato](PROPERTY) [establecido](EVENT) por las [autoridades tributarias](MODEL) de dicha materia.
 - intent: star
   examples: |
+    - Los [contactos](MODEL) tiene un [nombre](PROPERTY) y un [numero](PROPERTY)
+    - Los [mensajes](MODEL) tienen un [texto](PROPERTY), a veces una [imagen](PROPERTY) o un [audio](PROPERTY) 
     - Los [politicos](MODEL) [tienen](EVENT) un [nombre](PROPERTY), un [partido](PROPERTY) y un [cargo](PROPERTY) 
-    - El [sistema](SYSTEM) [tendrá](EVENT) un [usuario](MODEL) y [contraseña](MODEL)
+    - El [sistema](SYSTEM) [tendrá](EVENT) un [usuario](MODEL) y [contraseña](PROPERTY)
     - el [sistema](SYSTEM) deberá [solicitar](EVENT): [Nombre](PROPERTY) del cliente, [Apellidos](PROPERTY) del cliente, [Sexo](PROPERTY), [Documento](PROPERTY) de identidad, [Fecha de nacimiento](PROPERTY), [Correo electrónico](PROPERTY), Dirección](PROPERTY) de residencio, [Teléfono](PROPERTY)
     - El [sistema](SYSTEM) [permitirá](EVENT) [aprobar](EVENT), [cambiar](EVENT) o [actualizar](EVENT) [planes](MODEL) y [cronogramas de proyecto](MODEL).
     - Los integrantes del [grupo de usuarios de analistas](MODEL) pueden [ingresar](EVENT) [solicitudes](MODEL) pero no pueden [aprobarlas](EVENT) o [borrarlas](EVENT).
@@ -97,7 +95,6 @@ nlu:
 - intent: misc
   examples: |   
     - Las [listas de precios](MODEL) [tendrán](EVENT) un [período de vigencia](PROPERTY) ([fecha inicial](PROPERTY) y [fecha final](PROPERTY)). 
-
 
 
 

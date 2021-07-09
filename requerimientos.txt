@@ -27,3 +27,29 @@ Generamos gráfico: asdf.jpg
 
 # TODO 3: reentrenar y perfeccionar el ejemplo para que quede pitucon
 - cuando este listo lo otro
+
+## EJEMPLO DEMO (MVC)
+
+Es una aplicacion web que me permita organizar mis mensajes de whatsapp
+
+De de donde obtenes los mensajes
+- Los mensaje se consultan en la api de whatsapp
+De que estan compuestos los mensajes
+- Los mensajes tienen un texto, a veces una imagen o un audio 
+Como seria el proceso de organizar mensajes
+- Deberiamos calcualr una prioridad para cada mensaje 
+Como seria el proceso de calcualr prioridad
+- La prioridad se calcula utilizando un modulo de inteligencia artificial con NLP
+
+
+
+Es una aplicacion web que me permita organizar mis mensajes de whatsapp   
+Los mensajes tienen texto, imagen o audio                    
+Your input ->  Los mensajes se consultan a la api de whatsapp        
+Your input ->  La api de whatsapp es la que provee los mensajes y los contactos  XXXX
+Your input ->  Los contactos tienen un numero y un nombre                     
+Your input ->  Los contactos se obtienen de la api de whatsapp           
+Your input ->  Nidea                                           
+Your input ->  que la aplicacion web tiene que ordenar los mensajes por prioridad
+Your input ->  La aplicacion es la responsable de mostrar los mensajes ordenados por prioridad   
+Your input ->  No         

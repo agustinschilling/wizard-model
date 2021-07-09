@@ -102,7 +102,8 @@ def get_sugerencia_implementacion(graph_manager:GraphManager):
         text += ". \nEl hecho de que tengas una interfaz en la que interactuan usuarios y que ademas tengas que almacenar informacion para algunos objetos importantes me hace pensar que es la mejor decision."
         text += ". \nSi necesitas más información sobre este patrón o cualquier otro preguntale al profe de diseño."
 
-        text +=". \nAdaptando tus features a estepatrón, te sugiero implementar los siguientes modelos: "       
+        text +=". \nAdaptando tus features a este patrón, te sugiero implementar los siguientes modelos: "       
+
         for model in entities_grouped["MODEL"]:
             # Nombre del modelo
             text += "\nModelo: " + model
@@ -112,15 +113,16 @@ def get_sugerencia_implementacion(graph_manager:GraphManager):
             if propiedades:
                 text += "\nPropiedades del modelo: " + " ,".join(propiedades)
             # Eventos / funciones
-            eventos = [e.attr['label'] + " " +e[1] for e in graph_manager.graph.out_edges(model) if e.attr['label'] != '']
+
+            eventos = [e.attr['label'] + " " +e[1] for e in graph_manager.graph.out_edges(model) if len(e.attr['label']) > 0]
             if eventos:
                 text += "\nFunciones/responsabilidades (se pueden implementar en su controlador): " + " ,".join(eventos)
 
-        # Componentes
-        text += ". \nAdemás vas a necesitar clases para hacer la conexión con los siguientes componentes: "
-        text += ", ".join(entities_grouped["COMPONENT"])
+            componentes = [s.name for s in salidas if Entity.get_category_by_shape(s.attr['shape']) == "COMPONENT"] 
+            if componentes:
+                text += "\n El controlador de este modelo ademas debe tener soporte para conectarse con " + " y ".join(componentes)
         
         return text
-    
+        
     return "Ni idea como implementarlo"
          
