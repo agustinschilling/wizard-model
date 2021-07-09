@@ -135,7 +135,7 @@ class ActionAnalizarEspecificaciones(Action):
             features.append(text)
 
         # Muestro una al usuario
-        if ActionModelado.questions.remaining_size() is not 0:
+        if ActionModelado.questions.remaining_size() > 0:
             dispatcher.utter_message(ActionModelado.questions.get_question().get_filled_question())
             return [SlotSet('features', features)]
         else:
@@ -159,7 +159,7 @@ class ActionGuardarFeature(Action):
     ) -> List[Dict[Text, Any]]:
         # Obtengo el texto de respuesta
         text = tracker.latest_message['text']
-        
+
          # obtengo las preguntas para esta especificacion, dando el contexto actual
         questions = modelado.get_questions(text, modelado.QuestionsData.asked_questions,
                                            modelado.QuestionsData.remaining_questions)
@@ -177,7 +177,7 @@ class ActionGuardarFeature(Action):
         # Chequeo si termino. Si no termino hago la siguiente pregunta
         # en caso de tener pocas features hago una ronda mas de preguntas
         termino = None
-        if ActionModelado.questions.remaining_size() is not 0:
+        if ActionModelado.questions.remaining_size() != 0:
             dispatcher.utter_message(ActionModelado.questions.get_question().get_filled_question())
         else:
             termino = True

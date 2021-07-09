@@ -273,10 +273,10 @@ class GraphManager:
             return 
             
         # no in_neighbours
-        if len(self.graph.in_neighbors(to_delete_node)) is 0:
+        if len(self.graph.in_neighbors(to_delete_node)) == 0:
             # out_neighbours with label
             for out_node in self.graph.out_neighbors(to_delete_node):
-                if self.graph.get_edge(to_delete_node, out_node).attr['label'] is None:
+                if self.graph.get_edge(to_delete_node, out_node).attr['label'] == '':
                     return
             for out_node in self.graph.out_neighbors(to_delete_node):
                 old_edge = self.graph.get_edge(to_delete_node, out_node)

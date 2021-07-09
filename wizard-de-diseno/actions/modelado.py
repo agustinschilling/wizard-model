@@ -119,9 +119,8 @@ class Question:
         fill_vars = {}
         for entity_arg_name in self.fill_dict.keys():
             fill_vars[entity_arg_name] = self.fill_dict[entity_arg_name].name
-        a = self.template.substitute(fill_vars)
-        return a
-
+        return self.template.substitute(fill_vars)
+        
     def get_used_entities(self) -> List[Entity]:
         """
         :return: list of entities that are used to fill the templates
@@ -149,9 +148,9 @@ class QuestionsData:
         move returned question to asked to maintain history
         :return: next question without criteria
         """
-        next_q = self.remaining_questions.pop()
-        self.asked_questions.append(next_q)
-        return next_q
+        next_question = self.remaining_questions.pop()
+        self.asked_questions.append(next_question)
+        return next_question
 
     def remaining_size(self) -> int:
         return len(self.remaining_questions)
@@ -193,15 +192,15 @@ def get_questions(text: str, asked: List[Question], remaining: List[Question]) -
         elif entity.category == "COMPONENT":
             preguntas.append(Question("Cómo se relaciona $component con las otras partes del sistema?",
                                       {"component": entity}))
-
+    """
     model_entities = [e for e in entities if e.category == "MODEL" or e.category == "COMPONENT"]
     if len(model_entities) > 1:
         for e1, e2 in itertools.combinations(model_entities, 2):
             preguntas.append(Question("Contame mas informacion de como se relacionan $e1 y $e2",
                                       {"e1": e1, "e2": e2}))
+    """
     print([x.get_filled_question() for x in preguntas])
     return remove_repeated_questions(preguntas, asked, remaining, 0.8)
-
 
 def check_similar_words(word1, word2, ratio) -> bool:
     if word1 in word2 or word2 in word1:
@@ -211,7 +210,7 @@ def check_similar_words(word1, word2, ratio) -> bool:
     if len(word1) < len(word2):
         divider = word1
     # pocos cambios dan una distancia baja
-    if (1 - enchant.utils.levenshtein(word1, word2) / divider) > ratio:
+    if (1 - enchant.utils.levenshtein(word1, word2) / len(divider)) > ratio:
         print(word1 + " es similar a " + word2)
         return True
 
@@ -229,17 +228,17 @@ def check_similar_entities(old_q_ent: List[Entity], new_q_ent: List[Entity], rat
     same_entities = 0
     for q_old in old_q_ent:
         for q_new in new_q_ent:
-            if q_old.category is q_new.category and check_similar_words(q_old.name, q_new.name, ratio):
+            if q_old.category == q_new.category and check_similar_words(q_old.name, q_new.name, ratio):
                 same_entities += 1
 
     # compare ratio with smaller list
     # less entities in old
     if len(old_q_ent) < len(new_q_ent):
-        if same_entities / len(old_q_ent) >= ratio:
+        if same_entities / len(new_q_ent) >= ratio:
             return True
     # more or equal in old
     else:
-        if same_entities / len(new_q_ent) >= ratio:
+        if same_entities / len(old_q_ent) >= ratio:
             return True
 
     return False
