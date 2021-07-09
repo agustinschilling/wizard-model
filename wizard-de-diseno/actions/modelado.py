@@ -4,6 +4,8 @@ from typing import List, Dict
 
 import enchant.utils
 from rasa.nlu.model import Interpreter
+from termcolor import colored
+
 from .entities import Entity
 from .architecture_graph import GraphManager
 import os
@@ -118,7 +120,6 @@ class Question:
         for entity_arg_name in self.fill_dict.keys():
             fill_vars[entity_arg_name] = self.fill_dict[entity_arg_name].name
         a = self.template.substitute(fill_vars)
-        print(a)
         return a
 
     def get_used_entities(self) -> List[Entity]:
@@ -209,9 +210,9 @@ def check_similar_words(word1, word2, ratio) -> bool:
     divider = word2
     if len(word1) < len(word2):
         divider = word1
-    #pocos cambios dan una distancia baja
-    if (1 - enchant.utils.levenshtein(word1, word2)/divider) > ratio:
-        print(word1+" es similar a "+word2)
+    # pocos cambios dan una distancia baja
+    if (1 - enchant.utils.levenshtein(word1, word2) / divider) > ratio:
+        print(word1 + " es similar a " + word2)
         return True
 
     return False
@@ -232,15 +233,14 @@ def check_similar_entities(old_q_ent: List[Entity], new_q_ent: List[Entity], rat
                 same_entities += 1
 
     # compare ratio with smaller list
-    if same_entities > 0:
-        # less entities in old
-        if len(old_q_ent) < len(new_q_ent):
-            if len(old_q_ent) / same_entities >= ratio:
-                return True
-        # more or equal in old
-        else:
-            if len(new_q_ent) / same_entities >= ratio:
-                return True
+    # less entities in old
+    if len(old_q_ent) < len(new_q_ent):
+        if same_entities / len(old_q_ent) >= ratio:
+            return True
+    # more or equal in old
+    else:
+        if same_entities / len(new_q_ent) >= ratio:
+            return True
 
     return False
 
@@ -258,18 +258,22 @@ def remove_repeated_questions(new_q: List[Question],
     :param remaining:
     :return: questions of new_q that arent similar
     """
-    cleared_q = []
-    for q in new_q:
-        new_q_ent = q.get_used_entities()
-        for old_q in itertools.chain(asked, remaining):
-            old_q_ent = old_q.get_used_entities()
+    q_to_delete = []
+    for old_q in itertools.chain(asked, remaining):
+        old_q_ent = old_q.get_used_entities()
+        for q in new_q:
+            new_q_ent = q.get_used_entities()
             if not check_similar_entities(old_q_ent, new_q_ent, ratio):
-                cleared_q.append(q)
+                q_to_delete.append(q)
+                print(colored(q.get_filled_question() + "no es similar a " + old_q.get_filled_question(),
+                              color='blue'))
             # TODO borrar print de debug
             else:
-                print("detecto similar a: " + q.get_filled_question() + "y" + old_q.get_filled_question())
-    print([x.get_filled_question() for x in cleared_q])
-    return cleared_q
+                print(colored("detecto similar a: " + q.get_filled_question() + "y" + old_q.get_filled_question(),
+                              color='red'))
+    x = [n_q for n_q in new_q if n_q not in q_to_delete]
+    print([d.get_filled_question() for d in x])
+    return x
 
 
 #
